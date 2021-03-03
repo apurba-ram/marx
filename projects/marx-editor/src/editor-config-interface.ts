@@ -9,6 +9,7 @@ export interface EditorConfig {
     placeholder?: string;
     buttonName?: string;
     disabledButton?: boolean;
+    isCollapsible?: boolean;
 }
 
 export interface MentionedName {

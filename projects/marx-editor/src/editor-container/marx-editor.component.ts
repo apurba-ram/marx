@@ -61,6 +61,7 @@ export class MarxEditorComponent implements OnInit, OnChanges, AfterViewInit, On
   backgroundColor: string;
   clicked = false;
   moreOptionsButton: boolean;
+  isCollapsible: boolean;
 
   constructor() {
     this.fontColor = 'black';
@@ -108,12 +109,12 @@ export class MarxEditorComponent implements OnInit, OnChanges, AfterViewInit, On
     anchorTag.setAttribute('rel', 'noopener noreferrer');
 
     let range: any;
-    if(!this.oldRange) {
+    if (!this.oldRange) {
       range = this.sel.getRangeAt(0).cloneRange();
     } else {
       range = this.oldRange.cloneRange();
-    }   
-    this.sel.removeAllRanges(); 
+    }
+    this.sel.removeAllRanges();
     range.insertNode(anchorTag);
     range.setStartAfter(anchorTag);
     range.collapse();
@@ -150,7 +151,7 @@ export class MarxEditorComponent implements OnInit, OnChanges, AfterViewInit, On
   }
 
   writeValue(value: string, source?: string): void {
-    if(!source && document.getElementById(this.id)) {
+    if (!source && document.getElementById(this.id)) {
       document.getElementById(this.id).innerHTML = value ?? '';
     }
     this.htmlVal = value;
@@ -195,10 +196,10 @@ export class MarxEditorComponent implements OnInit, OnChanges, AfterViewInit, On
       false
     );
   }
- /**
-  * 
-  * @param event - Event fired whenever there is a selection change
-  */
+  /**
+   * 
+   * @param event - Event fired whenever there is a selection change
+   */
   selectionChange(event: any): void {
     if (document.activeElement === document.getElementById(this.id)) {
       this.oldRange = this.sel.getRangeAt(0).cloneRange();
@@ -287,9 +288,9 @@ export class MarxEditorComponent implements OnInit, OnChanges, AfterViewInit, On
       };
       if (Array.isArray(this.editorConfig?.mentionedNames) && this.editorConfig?.mentionedNames.length > 0) {
         this.editorConfig.mentionedNames = this.editorConfig?.mentionedNames.filter((item: { id: number; name: string }) => {
-            if (item.id !== 0 && item.name.trim() !== '') {
-              return item;
-            }
+          if (item.id !== 0 && item.name.trim() !== '') {
+            return item;
+          }
         });
 
         this.mentionConfig.mentions.push({
@@ -306,7 +307,7 @@ export class MarxEditorComponent implements OnInit, OnChanges, AfterViewInit, On
           dropUp: true,
         });
       }
-      if ( Array.isArray(this.editorConfig?.mentionedDates) && this.editorConfig?.mentionedDates.length > 0) {
+      if (Array.isArray(this.editorConfig?.mentionedDates) && this.editorConfig?.mentionedDates.length > 0) {
         this.editorConfig.mentionedDates = [
           ...new Set(this.editorConfig?.mentionedDates),
         ];
@@ -359,6 +360,7 @@ export class MarxEditorComponent implements OnInit, OnChanges, AfterViewInit, On
    */
   blur(): void {
     this.oldRange = this.sel.getRangeAt(0).cloneRange(); // to store the range when element is blurred
+    this.isCollapsible = false;
   }
 
   /**
@@ -367,6 +369,7 @@ export class MarxEditorComponent implements OnInit, OnChanges, AfterViewInit, On
   focus(): void {
     if (document.getElementById(`${this.id}`)) {
       document.getElementById(`${this.id}`).focus();
+      this.isCollapsible = true;
     }
   }
 
@@ -450,14 +453,14 @@ export class MarxEditorComponent implements OnInit, OnChanges, AfterViewInit, On
     let pastedText = clipboardData.getData('text');
     const rexa = /href=".*?"/g; // match all a href
 
-    if(event.clipboardData.types.indexOf('text/rtf') > -1) {
+    if (event.clipboardData.types.indexOf('text/rtf') > -1) {
       // Paste from word
       pastedHtml = this.cleanPaste(pastedHtml);
       pastedHtml = pastedHtml.replace(rexa, (match: any) => {
         const str = ' target="_blank" rel="noopener noreferrer"';
         return match + str;
       });
-     //  pastedHtml = this.cleanPaste(pastedHtml);
+      //  pastedHtml = this.cleanPaste(pastedHtml);
       document.execCommand('insertHtml', false, pastedHtml);
     } else if (event.clipboardData.types.indexOf('text/html') === -1) {
 
@@ -480,7 +483,7 @@ export class MarxEditorComponent implements OnInit, OnChanges, AfterViewInit, On
         let tS = new RegExp('<' + bT[i] + '\\b.*>.*</' + bT[i] + '>', 'gi');
         pastedHtml = pastedHtml.replace(tS, '');
       }
-     //  pastedHtml = this.cleanPaste(pastedHtml);
+      //  pastedHtml = this.cleanPaste(pastedHtml);
       document.execCommand('insertHtml', false, pastedHtml);
     }
   }
@@ -506,7 +509,7 @@ export class MarxEditorComponent implements OnInit, OnChanges, AfterViewInit, On
     }
 
     const bA = ['style', 'start'];
-    for (let ii = 0; ii < bA.length; ii++ ) {
+    for (let ii = 0; ii < bA.length; ii++) {
       let aS = new RegExp(' ' + bA[ii] + '=[\'|"](.*?)[\'|"]', 'gi');
       output = output.replace(aS, '');
       aS = new RegExp(' ' + bA[ii] + '[=0-9a-z]', 'gi');
@@ -515,10 +518,10 @@ export class MarxEditorComponent implements OnInit, OnChanges, AfterViewInit, On
     return output;
   }
 
- /**
-  * 
-  * @param event - Event triggered when one of the options in the toolbar is clicked
-  */
+  /**
+   * 
+   * @param event - Event triggered when one of the options in the toolbar is clicked
+   */
   toolbarClicked(event: any): void {
     try {
       const { startContainer } = this.sel.getRangeAt(0);
@@ -574,7 +577,7 @@ export class MarxEditorComponent implements OnInit, OnChanges, AfterViewInit, On
       case 'subscript': this.insertSubTag();
         break;
       case 'link': this.insertLink(value);
-                   break;
+        break;
       case 'bold':
         document.execCommand('bold', false, '');
         break;
@@ -648,15 +651,15 @@ export class MarxEditorComponent implements OnInit, OnChanges, AfterViewInit, On
         break; //8,9,10,11,12,14,18,24,32,36,48
       case 'fontsize-arial': document.execCommand('fontName', false, 'arial');
         break;
-      case 'fontsize-11':      
-      case 'fontsize-12': 
-      case 'fontsize-14':       
-      case 'fontsize-18': 
-      case 'fontsize-24': 
-      case 'fontsize-32': 
-      case 'fontsize-36': 
-      case 'fontsize-48':  this.setFontSize(id);
-                           break;
+      case 'fontsize-11':
+      case 'fontsize-12':
+      case 'fontsize-14':
+      case 'fontsize-18':
+      case 'fontsize-24':
+      case 'fontsize-32':
+      case 'fontsize-36':
+      case 'fontsize-48': this.setFontSize(id);
+        break;
     }
   }
 
@@ -668,7 +671,7 @@ export class MarxEditorComponent implements OnInit, OnChanges, AfterViewInit, On
     size = size.slice(size.lastIndexOf('-') + 1) + 'px';
     const container = document.createElement('span');
     container.setAttribute('style', `font-size: ${size};`);
-    if(!this.oldRange.collapsed) {
+    if (!this.oldRange.collapsed) {
       container.appendChild(this.oldRange.cloneContents());
       const html = `<span style="font-size: ${size};">${container.innerHTML}</span>`;
       document.execCommand('insertHTML', false, html);
@@ -719,7 +722,7 @@ export class MarxEditorComponent implements OnInit, OnChanges, AfterViewInit, On
       this.reachTextNode('sup');
     }
   }
-  
+
   /**
    * Function inserts sub tag inside the editor
    */
@@ -736,7 +739,7 @@ export class MarxEditorComponent implements OnInit, OnChanges, AfterViewInit, On
       this.reachTextNode('sub');
     }
   }
-  
+
   reachTextNode(tagName: string): void {
     const parent = this.getParent(this.sel.anchorNode, tagName);
     const space = document.createElement('text');
