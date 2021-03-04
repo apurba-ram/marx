@@ -479,7 +479,8 @@ const template = `<div class="editor-menu" (click)="buttonClicked($event)">
                                         </span>
                                     </span>
                                 </div>
-                                <p class="file-title">{{fileObj.file.name}}</p>
+                                <p class="file-title" [csTooltip]="fileObj.file.name"
+                                placement="bottom" delay="0" [tooltipMandatory]="true">{{fileObj.file.name}}</p>
                             </div>
                         </div>
                     </div>
