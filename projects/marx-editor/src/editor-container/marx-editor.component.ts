@@ -416,7 +416,7 @@ export class MarxEditorComponent implements OnInit, OnChanges, AfterViewInit, On
   */
   mentionClosed(): void {
 
-    if (this.tribute !== '') {
+    if (this.tribute && this.tribute !== '') {
       const input = document.createElement('input');
       input.setAttribute('value', `${this.tribute}`);
       input.setAttribute('type', 'button');

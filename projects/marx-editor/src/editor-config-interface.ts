@@ -10,6 +10,7 @@ export interface EditorConfig {
     buttonName?: string;
     disabledButton?: boolean;
     isCollapsible?: boolean;
+    link?: boolean;
 }
 
 export interface MentionedName {

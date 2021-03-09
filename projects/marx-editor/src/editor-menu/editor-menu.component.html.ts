@@ -383,7 +383,7 @@ const template = `<div class="editor-menu" (click)="buttonClicked($event)">
             </div>
         </div>
         <!-- Link -->
-        <div class="col" clickOutside (clickOutside)="closeAddLinksPopover()">
+        <div class="col" clickOutside (clickOutside)="closeAddLinksPopover()" *ngIf="editorConfig?.link">
             <button  type="button" (click)="addLink = true;" [class.active]="addLink" [csTooltip]="'Add Link'" placement="bottom"
                 delay="0" [tooltipMandatory]="true">
                 <svg version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 426.667 426.667" xml:space="preserve">
@@ -408,7 +408,7 @@ const template = `<div class="editor-menu" (click)="buttonClicked($event)">
                     </div>
                     <div class="link">
                         <label>Web Address</label>
-                        <input [(ngModel)]="linkUrl" type="text" placeholder="https://exampleimage.com">
+                        <input [(ngModel)]="linkUrl" type="text" placeholder="https://example.com">
                         <p class="error" *ngIf="invalidUrlMessage">{{invalidUrlMessage}}</p>
                     </div>
                     <div class="link">
