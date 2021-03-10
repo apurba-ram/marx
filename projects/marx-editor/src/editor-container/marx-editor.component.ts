@@ -62,6 +62,7 @@ export class MarxEditorComponent implements OnInit, OnChanges, AfterViewInit, On
   clicked = false;
   moreOptionsButton: boolean;
   isCollapsible: boolean;
+  menuLeftWidth: number = 600;
 
   constructor() {
     this.fontColor = 'black';
@@ -179,8 +180,13 @@ export class MarxEditorComponent implements OnInit, OnChanges, AfterViewInit, On
       this.selectionChange.bind(this),
       false
     );
-    if (this.editorContainer.nativeElement.offsetWidth < 600) {
+  }
+  getmenuLeftWidth(event) {
+    this.menuLeftWidth = event;
+    if (this.editorContainer.nativeElement.offsetWidth < this.menuLeftWidth) {
       this.moreOptionsButton = true;
+    } else {
+      this.moreOptionsButton = false;
     }
   }
   immageResize() {

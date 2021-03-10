@@ -1,5 +1,5 @@
 const template = `<div class="editor-menu" (click)="buttonClicked($event)">
-    <div class="left">
+    <div class="left" #menuLeft>
         <!-- Bold -->
         <div class="col" data-id="bold">
             <button type="button" data-id="bold" [class.active]="toolbarConfig?.bold" [csTooltip]="'Bold'" placement="bottom"
