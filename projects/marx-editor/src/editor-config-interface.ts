@@ -21,6 +21,7 @@ export interface EditorConfig {
     urlInputPlaceHolder?:string;
     textInputPlaceHolder?:string;
     titlePlaceholder?:string;
+    fontStyle?: boolean;
 
 }
 

@@ -5,6 +5,7 @@ import {
   EventEmitter,
   ViewChild,
   ElementRef,
+  OnInit,
 } from '@angular/core';
 import { EditorConfig, ToolbarConfig } from '../editor-config-interface';
 import template from './editor-menu.component.html';
@@ -13,7 +14,7 @@ import template from './editor-menu.component.html';
   template: template + ``,
   styleUrls: ['./editor-menu.component.less', '../theme.less'],
 })
-export class EditorMenuComponent {
+export class EditorMenuComponent implements OnInit {
   @Input() editorConfig: EditorConfig;
   @Input() toolbarConfig: ToolbarConfig;
   @Input() moreOptionsButton: boolean;
@@ -69,10 +70,10 @@ export class EditorMenuComponent {
    * 
    * @param event - Event triggered when the toolbar button is clicked
    */
-  ngAfterViewInit() {
+   ngOnInit() {
     setTimeout(() => {
-      const leftMenu = this.menuLeft?.nativeElement?.offsetWidth;
-      const rightMenu = this.menuRight?.nativeElement?.offsetWidth;
+      const leftMenu = this.menuLeft.nativeElement.offsetWidth;
+      const rightMenu = this.menuRight.nativeElement.offsetWidth;
       this.setWidth.emit({ left: leftMenu, right: rightMenu })
     }, 100);
   }

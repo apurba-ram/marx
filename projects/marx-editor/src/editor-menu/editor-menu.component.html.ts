@@ -55,7 +55,7 @@ const template = `<div class="editor-menu" (click)="buttonClicked($event)">
             </button>
         </div>
         <!-- Line through -->
-        <div class="col" data-id="strikeThrough">
+        <div class="col" data-id="strikeThrough" *ngIf="editorConfig?.strikeThrough">
             <button  type="button" data-id="strikeThrough" [class.active]="toolbarConfig?.strikeThrough" [csTooltip]="'Strike Through'"
                 placement="bottom" delay="0" [tooltipMandatory]="true">
                 <svg version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 384 384" xml:space="preserve"
@@ -250,7 +250,7 @@ const template = `<div class="editor-menu" (click)="buttonClicked($event)">
             </div>
         </div>
         <!-- Font-Style -->
-        <div class="col" clickOutside (clickOutside)="closeFontStylePopover()" *ngIf="editorConfig?.mode === 'prime'">
+        <div class="col" clickOutside (clickOutside)="closeFontStylePopover()" *ngIf="editorConfig?.mode === 'prime' && editorConfig?.fontStyle">
             <button type="button" (click)="fontStylePopover()" [csTooltip]="'Font Style'" placement="bottom" delay="0"
                 [tooltipMandatory]="true">
                 <svg version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 405.333 405.333" xml:space="preserve">
@@ -707,7 +707,7 @@ const template = `<div class="editor-menu" (click)="buttonClicked($event)">
 
         <div class="child-row" *ngIf="!moreOptionsButton">
             <!-- Quote -->
-            <div class="col" data-id="quote">
+            <div class="col" data-id="quote" *ngIf="editorConfig?.quote">
                 <button type="button" data-id="quote" [csTooltip]="'Quote'" placement="bottom" delay="0" [class.active]="toolbarConfig?.quote"
                     [tooltipMandatory]="true">
                     <svg width="299" height="299" viewBox="0 0 299 299" fill="none" xmlns="http://www.w3.org/2000/svg"

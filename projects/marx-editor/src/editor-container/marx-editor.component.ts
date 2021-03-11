@@ -187,7 +187,7 @@ export class MarxEditorComponent implements OnInit, OnChanges, AfterViewInit, On
     setTimeout(() => {
       this.menuLeftWidth = event.left;
       this.menuRightWidth = event.right;
-      if (this.editorContainer.nativeElement.offsetWidth < this.menuLeftWidth + this.menuRightWidth) {
+      if (this.editorContainer.nativeElement.offsetWidth < 460) {
         this.moreOptionsButton = true;
       } else {
         this.moreOptionsButton = false;
