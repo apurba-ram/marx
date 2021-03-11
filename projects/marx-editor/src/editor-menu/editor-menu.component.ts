@@ -21,8 +21,9 @@ export class EditorMenuComponent {
   @Output() sendSavedFiles: EventEmitter<any> = new EventEmitter();
   @Output() imageInEditor: EventEmitter<any> = new EventEmitter();
   @Output() linkInEditor: EventEmitter<any> = new EventEmitter();
-  @Output() menuLeftWidth: EventEmitter<any> = new EventEmitter();
+  @Output() setWidth: EventEmitter<any> = new EventEmitter();
   @ViewChild('menuLeft') menuLeft: ElementRef;
+  @ViewChild('menuRight') menuRight: ElementRef;
   enter = false;
   upload = false;
   uploadImage = false;
@@ -38,19 +39,20 @@ export class EditorMenuComponent {
   showAlert: boolean = false;
   alertMsg: string;
   savedFiles: any = [];
-  savedImages:any=[]
+  savedImages: any = []
   imgUrl: any = []; //img url array
   imgArr: Array<object> = [];
-  linkUrl:string
-  linkText:string
-  linkTitle:string
-  inValidUrl:boolean
-  invalidUrlMessage:string
-  inValidLinkTitle=''
-  inValidLinkText=''
-  savedLinks:object={ };
+  linkUrl: string
+  linkText: string
+  linkTitle: string
+  inValidUrl: boolean
+  invalidUrlMessage: string
+  inValidLinkTitle = ''
+  inValidLinkText = ''
+  savedLinks: object = {};
   fontFamily = false;
   moreOptions = false;
+  color = false;
 
 
   image: any;
@@ -67,17 +69,18 @@ export class EditorMenuComponent {
    * 
    * @param event - Event triggered when the toolbar button is clicked
    */
-   ngOnInit() {
+  ngAfterViewInit() {
     setTimeout(() => {
-      const leftMenu = this.menuLeft.nativeElement.offsetWidth;
-      this.menuLeftWidth.emit(leftMenu);
+      const leftMenu = this.menuLeft?.nativeElement?.offsetWidth;
+      const rightMenu = this.menuRight?.nativeElement?.offsetWidth;
+      this.setWidth.emit({ left: leftMenu, right: rightMenu })
     }, 100);
   }
   buttonClicked(event: any): void {
     event.stopPropagation();
     // console.log(event);
     if (event?.target?.dataset?.id) {
-          this.buttonClick.emit(event?.target?.dataset);
+      this.buttonClick.emit(event?.target?.dataset);
     }
   }
 
@@ -85,7 +88,7 @@ export class EditorMenuComponent {
    * 
    * @param type - Represents the color which is 
    */
-  colorChange(type: 'textColor' | 'fillColor'){
+  colorChange(type: 'textColor' | 'fillColor') {
     this.buttonClick.emit({
       id: type,
       value: type === 'textColor' ? this.toolbarConfig?.fontColor : this.toolbarConfig?.backgroundColor
@@ -98,9 +101,9 @@ export class EditorMenuComponent {
    * @returns a string value which represents an extension
    */
   getFileExtension(file: File): string {
-    if(file) {
+    if (file) {
       const index = file?.name.lastIndexOf('.');
-      if(index === -1) {
+      if (index === -1) {
         return 'file';
       } else {
         return file?.name?.slice(index + 1);
@@ -108,7 +111,7 @@ export class EditorMenuComponent {
     }
     return '';
   }
-  
+
   // Image popup code begins
 
   /**
@@ -119,14 +122,14 @@ export class EditorMenuComponent {
     this.uploadImage = false;
   }
 
-   /**
-   * @param event - Dropped event triggered
-  */
+  /**
+  * @param event - Dropped event triggered
+ */
   dropImage(event: any) {
     event.preventDefault();
     event.stopPropagation();
-    if(event?.dataTransfer?.files && event?.dataTransfer?.files.length > 0) {
-      if(this.validImage(event?.dataTransfer?.files[0])) {
+    if (event?.dataTransfer?.files && event?.dataTransfer?.files.length > 0) {
+      if (this.validImage(event?.dataTransfer?.files[0])) {
         this.showAlert = false;
         this.readImageFile(event?.dataTransfer?.files[0]);
       } else {
@@ -143,11 +146,11 @@ export class EditorMenuComponent {
   */
   validImage(file: File): boolean {
     const fileExtension = this.getFileExtension(file);
-    switch(fileExtension) {
+    switch (fileExtension) {
       case 'jpg':
       case 'jpeg':
       case 'png':
-      case 'gif': return true; 
+      case 'gif': return true;
 
       default: return false;
     }
@@ -156,7 +159,7 @@ export class EditorMenuComponent {
   /**
    * Function is invoked after the final save button is clicked from the image popup
   */
-  saveImage(): void{
+  saveImage(): void {
     this.imageInEditor.emit(this.image);
     this.clickOutsideImage();
   }
@@ -167,7 +170,7 @@ export class EditorMenuComponent {
   readImageFile(file: File): void {
     const fReader = new FileReader();
     fReader.readAsDataURL(file);
-    fReader.onloadend =  (event) => {
+    fReader.onloadend = (event) => {
       this.image = {
         url: event.target.result,
         file
@@ -179,12 +182,12 @@ export class EditorMenuComponent {
    * @param event - Event which is triggered when the user hits the browse button in image popup and selects a file
   */
   changeImage(event: any): void {
-    if(this.validImage(event?.target?.files[0])) {
+    if (this.validImage(event?.target?.files[0])) {
       this.showAlert = false;
       this.readImageFile(event?.target?.files[0]);
     } else {
-        this.alertMsg = 'Please choose image file only';
-        this.showAlert = true;
+      this.alertMsg = 'Please choose image file only';
+      this.showAlert = true;
     }
   }
 
@@ -214,9 +217,9 @@ export class EditorMenuComponent {
     event.preventDefault();
     event.stopPropagation();
 
-    if(event?.dataTransfer?.files && event?.dataTransfer?.files.length > 0) {
-      for (let i = 0; i <  event.dataTransfer.files.length; i++) {
-        this.filesArray.push({file: event.dataTransfer.files[i], extension: this.getFileExtension(event.dataTransfer.files[i])});
+    if (event?.dataTransfer?.files && event?.dataTransfer?.files.length > 0) {
+      for (let i = 0; i < event.dataTransfer.files.length; i++) {
+        this.filesArray.push({ file: event.dataTransfer.files[i], extension: this.getFileExtension(event.dataTransfer.files[i]) });
       }
     }
     this.enter = false;
@@ -235,8 +238,8 @@ export class EditorMenuComponent {
    * @param event - Event triggered when user clicks on browse button of the file popup
    */
   filesFromInput(event: any): void {
-    for (let i = 0; i <  event.target.files.length; i++) {
-      this.filesArray.push({file: event.target.files[i], extension: this.getFileExtension(event.target.files[i])});
+    for (let i = 0; i < event.target.files.length; i++) {
+      this.filesArray.push({ file: event.target.files[i], extension: this.getFileExtension(event.target.files[i]) });
     }
     event.target.value = ''
   }
@@ -291,19 +294,19 @@ export class EditorMenuComponent {
   /**
    * Function is invoked when the user clicks on the save button from the add link popover
   */
-  saveLink(): void { 
-    console.log("Link Data",this.linkText,this.linkTitle,this.linkUrl)
+  saveLink(): void {
+    console.log("Link Data", this.linkText, this.linkTitle, this.linkUrl)
     const rex = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi;
-    if(!this.linkUrl || !this.linkUrl?.match(rex)) { //check url is valid or not
-        this.invalidUrlMessage = 'Please provde a valid URL';
-    } else {    
+    if (!this.linkUrl || !this.linkUrl?.match(rex)) { //check url is valid or not
+      this.invalidUrlMessage = 'Please provde a valid URL';
+    } else {
       const obj = {
-            value: {
-              linkUrl:this.linkUrl,
-              linkText:this.linkText?.trim() ?? '',
-              linkTitle:this.linkTitle?.trim() ?? ''
-            },
-            id: 'link'
+        value: {
+          linkUrl: this.linkUrl,
+          linkText: this.linkText?.trim() ?? '',
+          linkTitle: this.linkTitle?.trim() ?? ''
+        },
+        id: 'link'
       };
       this.linkInEditor.emit(obj);
       this.closeAddLinksPopover();
@@ -319,7 +322,7 @@ export class EditorMenuComponent {
     this.linkUrl = '';
     this.addLink = false;
   }
-   
+
   // Add Link code ends
 
 

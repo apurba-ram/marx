@@ -62,7 +62,8 @@ export class MarxEditorComponent implements OnInit, OnChanges, AfterViewInit, On
   clicked = false;
   moreOptionsButton: boolean;
   isCollapsible: boolean;
-  menuLeftWidth: number = 600;
+  menuLeftWidth: number;
+  menuRightWidth: number;
 
   constructor() {
     this.fontColor = 'black';
@@ -181,14 +182,19 @@ export class MarxEditorComponent implements OnInit, OnChanges, AfterViewInit, On
       false
     );
   }
-  getmenuLeftWidth(event) {
-    this.menuLeftWidth = event;
-    if (this.editorContainer.nativeElement.offsetWidth < this.menuLeftWidth) {
-      this.moreOptionsButton = true;
-    } else {
-      this.moreOptionsButton = false;
-    }
+
+  getmenuWidth(event) {
+    setTimeout(() => {
+      this.menuLeftWidth = event.left;
+      this.menuRightWidth = event.right;
+      if (this.editorContainer.nativeElement.offsetWidth < this.menuLeftWidth + this.menuRightWidth) {
+        this.moreOptionsButton = true;
+      } else {
+        this.moreOptionsButton = false;
+      }
+    }, 100);
   }
+
   immageResize() {
     const imageWidth = document.getElementById('contentimage').offsetWidth;
     const imageHeight = document.getElementById('contentimage').offsetWidth;
