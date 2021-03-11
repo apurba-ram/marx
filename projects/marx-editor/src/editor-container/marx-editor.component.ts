@@ -716,10 +716,13 @@ export class MarxEditorComponent implements OnInit, OnChanges, AfterViewInit, On
    * Function inserts sup tag inside the editor
    */
   insertSupTag(): void {
+    console.log('P');
     if (!this.toolbarConfig.superscript) {
       const sup = document.createElement('sup');
-      sup.innerHTML = '&#8204;';
+      sup.innerHTML = '&#8204;'
       const range = this.sel.getRangeAt(0);
+      sup.textContent = window.getSelection().toString();
+      range.deleteContents();
       range.insertNode(sup);
       range.setStart(sup, 1);
       range.setEnd(sup, 1);
@@ -737,6 +740,8 @@ export class MarxEditorComponent implements OnInit, OnChanges, AfterViewInit, On
       const sub = document.createElement('sub');
       sub.innerHTML = '&#8204;';
       const range = this.sel.getRangeAt(0);
+      sub.textContent = window.getSelection().toString();
+      range.deleteContents();
       range.insertNode(sub);
       range.setStart(sub, 1);
       range.setEnd(sub, 1);
