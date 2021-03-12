@@ -26,7 +26,8 @@ const template = `<div class="color-palette">
     <div class="colors">
         <input type="radio" name="color" [(ngModel)]="color" (ngModelChange)="change($event)" value="white"><span class="white"></span>
     </div>
-</div>`
+</div>
+ `
 
 export default template;
  

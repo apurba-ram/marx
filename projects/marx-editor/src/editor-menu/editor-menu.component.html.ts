@@ -484,17 +484,18 @@ const template = `<div class="editor-menu" (click)="buttonClicked($event)">
                         <button  type="button" class="close" (click)="closeAddLinksPopover()">&times;</button>
                     </div>
                     <div class="link">
-                        <label>Web Address</label>
-                        <input [(ngModel)]="linkUrl" type="text" placeholder="https://example.com">
-                        <p class="error" *ngIf="invalidUrlMessage">{{invalidUrlMessage}}</p>
+                        <label>{{editorConfig?.urlValue ? editorConfig?.urlValue : 'URL'}}</label>
+                        <input [(ngModel)]="linkUrl" type="text" placeholder="{{editorConfig?.urlInputPlaceHolder ? editorConfig?.urlInputPlaceHolder : 'Enter a URL (Example: https://example.com)'}}">
+                        <p class="error" *ngIf="invalidUrlMessage">{{editorConfig?.validUrlMsg}}</p>
+                    </div>
+
+                    <div class="link">
+                        <label>{{editorConfig?.urlText ? editorConfig?.urlText : 'Display text'}}</label>
+                        <input [(ngModel)]="linkText" type="text" placeholder="{{editorConfig?.textInputPlaceHolder ? editorConfig?.textInputPlaceHolder : 'Enter a display text'}}">
                     </div>
                     <div class="link">
-                        <label>Display Text</label>
-                        <input [(ngModel)]="linkText" type="text" placeholder="Enter Text">
-                    </div>
-                    <div class="link">
-                        <label>Title</label>
-                        <input [(ngModel)]="linkTitle" type="text" placeholder="Enter a title">
+                        <label>{{editorConfig?.urlTitle ? editorConfig?.urlTitle : 'Title'}}</label>
+                        <input [(ngModel)]="linkTitle" type="text" placeholder="{{editorConfig?.titlePlaceholder? editorConfig?.titlePlaceholder: 'Enter a display title'}}">
                     </div>
                     <div class="footer">
                         <button  type="button" class="cancel" (click)="closeAddLinksPopover()">Cancel</button><button
