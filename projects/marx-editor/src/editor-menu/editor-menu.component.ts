@@ -5,7 +5,7 @@ import {
   EventEmitter,
   ViewChild,
   ElementRef,
-  AfterViewInit,
+  OnInit,
 } from '@angular/core';
 import { EditorConfig, ToolbarConfig } from '../editor-config-interface';
 import template from './editor-menu.component.html';
@@ -14,7 +14,7 @@ import template from './editor-menu.component.html';
   template: template + ``,
   styleUrls: ['./editor-menu.component.less', '../theme.less'],
 })
-export class EditorMenuComponent implements AfterViewInit {
+export class EditorMenuComponent implements OnInit {
   @Input() editorConfig: EditorConfig;
   @Input() toolbarConfig: ToolbarConfig;
   @Input() moreOptionsButton: boolean;
@@ -22,9 +22,6 @@ export class EditorMenuComponent implements AfterViewInit {
   @Output() sendSavedFiles: EventEmitter<any> = new EventEmitter();
   @Output() imageInEditor: EventEmitter<any> = new EventEmitter();
   @Output() linkInEditor: EventEmitter<any> = new EventEmitter();
-  @Output() menuLeftWidth: EventEmitter<any> = new EventEmitter();
-  @Output() menuRightWidth: EventEmitter<any> = new EventEmitter();
-
   @Output() setWidth: EventEmitter<any> = new EventEmitter();
   @ViewChild('menuLeft') menuLeft: ElementRef;
   @ViewChild('menuRight') menuRight: ElementRef;
@@ -50,7 +47,7 @@ export class EditorMenuComponent implements AfterViewInit {
   linkText: string
   linkTitle: string
   inValidUrl: boolean
-  invalidUrlMessage: boolean
+  invalidUrlMessage: string
   inValidLinkTitle = ''
   inValidLinkText = ''
   savedLinks: object = {};
@@ -58,33 +55,28 @@ export class EditorMenuComponent implements AfterViewInit {
   moreOptions = false;
   color = false;
 
-  popupZIndex: number;
-
 
   image: any;
-  fontType: string[];
+  fontStyles: string[];
 
   constructor() {
     this.filesArray = [];
-    this.fillColor = Array(2).fill(true);
+    this.fillColor = Array(2).fill(false);
     this.image = null;
-    this.fontType = ['verdana', 'arial', 'georgia', 'impact', 'courier new', 'tahoma']
+    this.fontStyles = ['verdana', 'arial', 'georgia', 'impact', 'courier new', 'tahoma']
   }
-  ngAfterViewInit() {
-    setTimeout(() => {
-      const leftMenu = this.menuLeft?.nativeElement?.offsetWidth;
-      // console.log(leftMenu);
-      // this.menuLeftWidth.emit(leftMenu);
-      const rightMenu = this.menuRight?.nativeElement?.offsetWidth;
-      // console.log(rightMenu);
-      // this.menuRightWidth.emit(rightMenu);
-      this.setWidth.emit({ left: leftMenu, right: rightMenu })
-    }, 90);
-  }
+
   /**
    * 
    * @param event - Event triggered when the toolbar button is clicked
    */
+   ngOnInit() {
+    setTimeout(() => {
+      const leftMenu = this.menuLeft.nativeElement.offsetWidth;
+      const rightMenu = this.menuRight.nativeElement.offsetWidth;
+      this.setWidth.emit({ left: leftMenu, right: rightMenu })
+    }, 100);
+  }
   buttonClicked(event: any): void {
     event.stopPropagation();
     // console.log(event);
@@ -307,12 +299,8 @@ export class EditorMenuComponent implements AfterViewInit {
     console.log("Link Data", this.linkText, this.linkTitle, this.linkUrl)
     const rex = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi;
     if (!this.linkUrl || !this.linkUrl?.match(rex)) { //check url is valid or not
-      this.invalidUrlMessage = true
-    }
-    else {
-      if (this.linkText === undefined) {
-        this.linkText = this.linkUrl
-      }
+      this.invalidUrlMessage = 'Please provde a valid URL';
+    } else {
       const obj = {
         value: {
           linkUrl: this.linkUrl,
@@ -321,9 +309,6 @@ export class EditorMenuComponent implements AfterViewInit {
         },
         id: 'link'
       };
-      // if (this.linkText === undefined || this.linkText === '') {
-      //   alert('Hi');
-      // }
       this.linkInEditor.emit(obj);
       this.closeAddLinksPopover();
     }
@@ -337,7 +322,6 @@ export class EditorMenuComponent implements AfterViewInit {
     this.linkTitle = '';
     this.linkUrl = '';
     this.addLink = false;
-    this.invalidUrlMessage = false;
   }
 
   // Add Link code ends
