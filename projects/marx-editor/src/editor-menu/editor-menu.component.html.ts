@@ -87,7 +87,8 @@ const template = `<div class="editor-menu" (click)="buttonClicked($event)">
             </button>
         </div>
         <!-- list -->
-        <div class="col" clickOutside (clickOutside)="closeListStylesPopover()">
+        <div class="col" clickOutside (clickOutside)="closeListStylesPopover(); listStyle = false;">
+        <div class="popover-overlay" *ngIf="listStyle" (click)="listStyle = false"></div>
             <button type="button" class="lg" [class.active]="listStyle|| toolbarConfig?.orderedList || toolbarConfig?.unorderedList"
                 (click)="listStyles()" [csTooltip]="'List Option'" placement="bottom" delay="0"
                 [tooltipMandatory]="true">
@@ -154,7 +155,8 @@ const template = `<div class="editor-menu" (click)="buttonClicked($event)">
             </div>
         </div>
         <!-- Text Align -->
-        <div class="col" clickOutside (clickOutside)="closeAlignPopover()" *ngIf="editorConfig?.mode === 'prime'">
+        <div class="col" clickOutside (clickOutside)="closeAlignPopover(); alignment = false" *ngIf="editorConfig?.mode === 'prime'">
+        <div class="popover-overlay" *ngIf="alignment" (click)="alignment = false"></div>
             <button type="button" (click)="alignPopover()" [class.active]="alignment" class="lg" [csTooltip]="'Text Alignment'"
                 placement="bottom" delay="0" [tooltipMandatory]="true">
                 <svg width="595" height="400" viewBox="0 0 595 400" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -250,7 +252,8 @@ const template = `<div class="editor-menu" (click)="buttonClicked($event)">
             </div>
         </div>
         <!-- Font-Style -->
-        <div class="col" clickOutside (clickOutside)="closeFontStylePopover()" *ngIf="editorConfig?.mode === 'prime' && editorConfig?.fontStyle">
+        <div class="col" clickOutside (clickOutside)="closeFontStylePopover(); fontStyle = false" *ngIf="editorConfig?.mode === 'prime' && editorConfig?.fontStyle">
+        <div class="popover-overlay" *ngIf="fontStyle" (click)="fontStyle = false"></div>
             <button type="button" (click)="fontStylePopover()" [csTooltip]="'Font Style'" placement="bottom" delay="0"
                 [tooltipMandatory]="true">
                 <svg version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 405.333 405.333" xml:space="preserve">
@@ -296,7 +299,8 @@ const template = `<div class="editor-menu" (click)="buttonClicked($event)">
             </div>
         </div>
         <!-- Font-Size -->
-        <div class="col" clickOutside (clickOutside)="closeFontSizePopover()" *ngIf="editorConfig?.mode === 'prime'">
+        <div class="col" clickOutside (clickOutside)="closeFontSizePopover(); fontSize = false" *ngIf="editorConfig?.mode === 'prime'">
+        <div class="popover-overlay" *ngIf="fontSize" (click)="fontSize = false"></div>
             <button  type="button" class="lg" (click)="fontSizePopover()" [csTooltip]="'Font Size'" placement="bottom" delay="0"
                 [tooltipMandatory]="true">
                 <svg width="320" height="320" viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -316,6 +320,7 @@ const template = `<div class="editor-menu" (click)="buttonClicked($event)">
         </div>
         <!-- Font Family-->
         <div class="col" clickOutside (clickOutside)="fontFamily = false;" *ngIf="editorConfig?.mode === 'prime'">
+        <div class="popover-overlay" *ngIf="fontFamily" (click)="fontFamily = false"></div>
             <button  type="button" (click)="openfontFamily()" [class.active]="fontFamily" [csTooltip]="'Font Family'" [class.active]="fontStyles.includes(toolbarConfig?.fontStyle)"
                 placement="bottom" delay="0" [tooltipMandatory]="true">
                 <svg viewBox="0 0 20 20">
@@ -335,8 +340,7 @@ const template = `<div class="editor-menu" (click)="buttonClicked($event)">
             </div>
         </div>
         <!-- Color -->
-        <div class="col" clickOutside (clickOutside)="color = false;"
-            *ngIf="editorConfig?.colorPalette && editorConfig?.mode === 'prime'">
+        <div class="col" clickOutside (clickOutside)="color = false;" *ngIf="editorConfig?.colorPalette && editorConfig?.mode === 'prime'">
             <button (click)="color = !color; fillColor[0] = true" [class.active]="color" [csTooltip]="'Color'" placement="bottom" delay="0" type="button" [tooltipMandatory]="true">
                 <svg version="1.1" x="0px" y="0px" viewBox="0 0 248.151 248.151" style="enable-background:new 0 0 248.151 248.151;" xml:space="preserve">
                     <g>
